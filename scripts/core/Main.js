@@ -12,6 +12,8 @@ export default class Main {
         this._clock = new THREE.Clock();
         this._container = document.getElementById('container');
 
+        this.skybox;
+
         this._createRenderer();
         this._createScene();
         this._createUser();
@@ -49,11 +51,13 @@ export default class Main {
     }
 
     _createAssets() {
-        let skybox = new Skybox({
+        this._skybox = new Skybox({
             "Path": "./images/skyboxes/space/",
-            "File Extension": ".png"
+            "File Extension": ".png",
+            "Skybox Size": 1000,
+            "Rotations Per Minute": 0.1,
         });
-        skybox.addToScene(this._scene);
+        this._skybox.addToParent(this._scene);
     }
 
     _addEventListeners() {
@@ -73,6 +77,7 @@ export default class Main {
     _update() {
         let timeDelta = this._clock.getDelta();
         this._sessionHandler.update();
+        this._skybox.update(timeDelta);
         this._renderer.render(this._scene, this._camera);
     }
 }
